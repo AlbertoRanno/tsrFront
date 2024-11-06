@@ -104,6 +104,7 @@ const ReportsPage = () => {
                 <option value="SAHUMERIO">Sahumerio</option>
                 <option value="TE">Té</option>
                 <option value="JUGUETE">Juguete</option>
+                <option value="VARIOS">Varios</option>
             </select>
             {profitabilityByType && (
                 <ul>

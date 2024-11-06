@@ -14,7 +14,7 @@ const ProductForm = ({ onSubmit, initialData }) => {
         if (successMessage) {
             const timer = setTimeout(() => {
                 setSuccessMessage('');
-            }, 3000);
+            }, 2000);
             return () => clearTimeout(timer);
         }
     }, [successMessage]);
@@ -59,6 +59,7 @@ const ProductForm = ({ onSubmit, initialData }) => {
                 <option value="SAHUMERIO">Sahumerio</option>
                 <option value="TE">Té</option>
                 <option value="JUGUETE">Juguete</option>
+                <option value="VARIOS">Varios</option>
             </select>
             <button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Cargando...' : (initialData ? 'Actualizar' : 'Crear')}

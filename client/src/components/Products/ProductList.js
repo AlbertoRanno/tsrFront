@@ -1,12 +1,14 @@
 // src/components/Products/ProductList.js
 import React, { useState, useEffect } from 'react';
 import ConfirmationModal from '../ConfirmationModal';
+import './ProductList.css'
 
 const ProductList = ({ products, onUpdate, onDelete }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, id: null });
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const [filterType, setFilterType] = useState('TODOS');
 
     useEffect(() => {
         if (successMessage) {
@@ -48,10 +50,28 @@ const ProductList = ({ products, onUpdate, onDelete }) => {
         }
     };
 
+    const filteredProducts = filterType === 'TODOS'
+        ? products
+        : products.filter(product => product.tipo === filterType);
+
     return (
         <div className="product-list">
             {/*<h2>Lista de Productos</h2>*/}
             {successMessage && <div className="success-message">{successMessage}</div>}
+            <div>
+                <label htmlFor="filterType">Filtrar por tipo: </label>
+                <select
+                    id="filterType"
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                >
+                    <option value="TODOS">Todos</option>
+                    <option value="SAHUMERIO">Sahumerio</option>
+                    <option value="TE">Té</option>
+                    <option value="JUGUETE">Juguete</option>
+                    <option value="VARIOS">Varios</option>
+                </select>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -62,7 +82,7 @@ const ProductList = ({ products, onUpdate, onDelete }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
                         <tr key={product.id}>
                             {editingId === product.id ? (
                                 <>
@@ -89,6 +109,7 @@ const ProductList = ({ products, onUpdate, onDelete }) => {
                                             <option value="SAHUMERIO">Sahumerio</option>
                                             <option value="TE">Té</option>
                                             <option value="JUGUETE">Juguete</option>
+                                            <option value="VARIOS">Varios</option>
                                         </select>
                                     </td>
                                     <td>

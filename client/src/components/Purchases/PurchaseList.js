@@ -122,7 +122,8 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                                 </>
                             ) : (
                                 <>
-                                    <td>{new Date(compra.fechaDeCompra).toLocaleDateString()}</td>
+                                {/* Ajuste debido a un problema de conversión de zonas horarias, al aplicarle la conversión de formato, se mostraba bien el formato, pero el día anterior. */}
+                                    <td>{new Date(compra.fechaDeCompra + 'T00:00:00').toLocaleDateString()}</td>
                                     <td>{compra.producto.nombre}</td>
                                     <td>{compra.cantidadComprada}</td>
                                     <td>{compra.precioDeCompra}</td>

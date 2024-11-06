@@ -27,12 +27,19 @@ const ProductsPage = () => {
 
     const handleCreateProduct = async (productData) => {
         try {
+            // Verificar si ya existe un producto con el mismo nombre
+            const existingProduct = products.find(p => p.nombre.toLowerCase() === productData.nombre.toLowerCase());
+            if (existingProduct) {
+                setError('Ya existe un producto con este nombre. Por favor, elija un nombre diferente.');
+                return false;
+            }
             const newProduct = await createProducto(productData);
             if (typeof newProduct === 'object' && newProduct.id) {
                 setProducts(prevProducts => [...prevProducts, newProduct]);
             } else {
                 await fetchProducts();
             }
+            setError(null);
             return true;
         } catch (err) {
             console.error('Error al crear el producto:', err);
@@ -43,6 +50,12 @@ const ProductsPage = () => {
 
     const handleUpdateProduct = async (id, productData) => {
         try {
+            // Verificar si ya existe otro producto con el mismo nombre (excluyendo el producto actual)
+            const existingProduct = products.find(p => p.id !== id && p.nombre.toLowerCase() === productData.nombre.toLowerCase());
+            if (existingProduct) {
+                setError('Ya existe otro producto con este nombre. Por favor, elija un nombre diferente.');
+                return false;
+            }
             const result = await updateProducto(id, productData);
             if (result === "Producto modificado") {
                 setProducts(prevProducts => prevProducts.map(product => 
@@ -55,6 +68,7 @@ const ProductsPage = () => {
             } else {
                 await fetchProducts();
             }
+            setError(null);
             return true;
         } catch (err) {
             console.error('Error al actualizar el producto:', err);
@@ -71,6 +85,7 @@ const ProductsPage = () => {
             } else {
                 await fetchProducts();
             }
+            setError(null);
             return true;
         } catch (err) {
             console.error('Error al eliminar el producto:', err);
@@ -80,11 +95,11 @@ const ProductsPage = () => {
     };
 
     if (loading) return <div>Cargando productos...</div>;
-    if (error) return <div className="error-message">{error}</div>;
 
     return (
         <div>
             {/*<h1>Gestión de Productos</h1>*/}
+            {error && <div className="error-message">{error}</div>}
             <ProductForm onSubmit={handleCreateProduct} />
             <ProductList
                 products={products}
