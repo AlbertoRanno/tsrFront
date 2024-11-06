@@ -1,0 +1,97 @@
+/* src/styles/forms.css */
+.product-form,
+.compra-form,
+.venta-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto 20px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+
+.product-form input,
+.product-form select,
+.compra-form input,
+.compra-form select,
+.venta-form input,
+.venta-form select {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.product-form button,
+.compra-form button,
+.venta-form button {
+    padding: 10px;
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product-form button:hover,
+.compra-form button:hover,
+.venta-form button:hover {
+    background-color: #732d91;
+}
+
+.product-list,
+.compra-list,
+.venta-list {
+    margin-top: 20px;
+}
+
+.product-list table,
+.compra-list table,
+.venta-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-list th,
+.product-list td,
+.compra-list th,
+.compra-list td,
+.venta-list th,
+.venta-list td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.product-list th,
+.compra-list th,
+.venta-list th {
+    background-color: #8e44ad;
+    color: white;
+}
+
+.product-list tr:nth-child(even),
+.compra-list tr:nth-child(even),
+.venta-list tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.product-list button,
+.compra-list button,
+.venta-list button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.product-list button:hover,
+.compra-list button:hover,
+.venta-list button:hover {
+    background-color: #2980b9;
+}

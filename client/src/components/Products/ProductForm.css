@@ -1,0 +1,11 @@
+/* ProductForm.css */
+.product-form input {
+    width: 40%;
+}
+.product-form select {
+    width: 20%;
+    margin-left: 10px;
+}
+.product-form button {
+    margin-left: 10px;
+}
