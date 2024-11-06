@@ -1,5 +1,5 @@
 // src/components/Purchases/PurchaseList.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ConfirmationModal from '../ConfirmationModal';
 
 const CompraList = ({ compras, onUpdate, onDelete }) => {
@@ -7,6 +7,7 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const [sortConfig, setSortConfig] = useState({ key: 'fechaDeCompra', direction: 'descending' });
 
     useEffect(() => {
         if (successMessage) {
@@ -58,19 +59,54 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
         }
     };
 
+    const requestSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key) {
+            direction = sortConfig.direction === 'ascending' ? 'descending' : 'ascending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedCompras = useMemo(() => {
+        let sortableItems = [...compras];
+        const compareFunction = (a, b) => {
+            if (sortConfig.key === 'fechaDeCompra') {
+                const dateA = new Date(a.fechaDeCompra);
+                const dateB = new Date(b.fechaDeCompra);
+                return sortConfig.direction === 'ascending' ? dateA - dateB : dateB - dateA;
+            }
+            if (sortConfig.key === 'producto') {
+                const compareResult = a.producto.nombre.localeCompare(b.producto.nombre);
+                return sortConfig.direction === 'ascending' ? compareResult : -compareResult;
+            }
+            if (a[sortConfig.key] < b[sortConfig.key]) {
+                return sortConfig.direction === 'ascending' ? -1 : 1;
+            }
+            if (a[sortConfig.key] > b[sortConfig.key]) {
+                return sortConfig.direction === 'ascending' ? 1 : -1;
+            }
+            return 0;
+        };
+
+        return sortableItems.sort(compareFunction);
+    }, [compras, sortConfig]);
+
     if (!Array.isArray(compras) || compras.length === 0) {
         return <div>No hay compras disponibles.</div>;
     }
 
     return (
         <div className="compra-list">
-            {/*<h2>Lista de Compras</h2>*/}
             {successMessage && <div className="success-message">{successMessage}</div>}
             <table>
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Producto</th>
+                        <th onClick={() => requestSort('fechaDeCompra')}>
+                            Fecha {sortConfig.key === 'fechaDeCompra' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                        </th>
+                        <th onClick={() => requestSort('producto')}>
+                            Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                        </th>
                         <th>Cantidad</th>
                         <th>Precio</th>
                         <th>Tipo de Cambio</th>
@@ -78,7 +114,7 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {compras.map((compra) => (
+                    {sortedCompras.map((compra) => (
                         <tr key={compra.id}>
                             {editingId === compra.id ? (
                                 <>
@@ -122,7 +158,6 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                                 </>
                             ) : (
                                 <>
-                                {/* Ajuste debido a un problema de conversión de zonas horarias, al aplicarle la conversión de formato, se mostraba bien el formato, pero el día anterior. */}
                                     <td>{new Date(compra.fechaDeCompra + 'T00:00:00').toLocaleDateString()}</td>
                                     <td>{compra.producto.nombre}</td>
                                     <td>{compra.cantidadComprada}</td>
