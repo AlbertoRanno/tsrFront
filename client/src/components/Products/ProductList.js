@@ -58,26 +58,25 @@ const ProductList = ({ products, onUpdate, onDelete }) => {
         <div className="product-list">
             {/*<h2>Lista de Productos</h2>*/}
             {successMessage && <div className="success-message">{successMessage}</div>}
-            <div>
-                <label htmlFor="filterType">Filtrar por tipo: </label>
-                <select
-                    id="filterType"
-                    value={filterType}
-                    onChange={(e) => setFilterType(e.target.value)}
-                >
-                    <option value="TODOS">Todos</option>
-                    <option value="SAHUMERIO">Sahumerio</option>
-                    <option value="TE">Té</option>
-                    <option value="JUGUETE">Juguete</option>
-                    <option value="VARIOS">Varios</option>
-                </select>
-            </div>
+
             <table>
                 <thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Stock</th>
-                        <th>Tipo</th>
+                        <th>
+                            <label htmlFor="filterType">Tipo</label>
+                            <select
+                                id="filterType"
+                                value={filterType}
+                                onChange={(e) => setFilterType(e.target.value)}
+                            >
+                                <option value="TODOS">Todos</option>
+                                <option value="SAHUMERIO">Sahumerio</option>
+                                <option value="TE">Té</option>
+                                <option value="JUGUETE">Juguete</option>
+                                <option value="VARIOS">Varios</option>
+                            </select></th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
