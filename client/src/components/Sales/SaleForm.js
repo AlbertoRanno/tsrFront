@@ -9,6 +9,7 @@ const VentaForm = ({ onSubmit, initialData }) => {
         cantidadVendida: '',
         precioDeVenta: '',
         tipoCambio: '',
+        infoAdicional: '',
         producto: { id: '' }
     });
     const [productos, setProductos] = useState([]);
@@ -56,6 +57,7 @@ const VentaForm = ({ onSubmit, initialData }) => {
                 cantidadVendida: '',
                 precioDeVenta: '',
                 tipoCambio: '',
+                infoAdicional: '',
                 producto: { id: '' }
             });
             setSuccessMessage(initialData ? 'Venta actualizada exitosamente' : 'Venta creada exitosamente');
@@ -100,6 +102,12 @@ const VentaForm = ({ onSubmit, initialData }) => {
                 placeholder="Tipo de cambio"
                 step="0.01"
                 required
+            />
+            <textarea
+                name="infoAdicional"
+                value={formData.infoAdicional}
+                onChange={handleChange}
+                placeholder="Información adicional (opcional)"
             />
             <select
                 name="productoId"

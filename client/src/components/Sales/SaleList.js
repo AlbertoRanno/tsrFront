@@ -1,5 +1,5 @@
 // src/components/Sales/SaleList.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ConfirmationModal from '../ConfirmationModal';
 
 const VentaList = ({ ventas, onUpdate, onDelete }) => {
@@ -7,6 +7,7 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const [sortConfig, setSortConfig] = useState({ key: 'fechaDeVenta', direction: 'descending' });
 
     useEffect(() => {
         if (successMessage) {
@@ -24,6 +25,7 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
             cantidadVendida: venta.cantidadVendida,
             precioDeVenta: venta.precioDeVenta,
             tipoCambio: venta.tipoCambio,
+            infoAdicional: venta.infoAdicional,
             producto: { id: venta.producto.id }
         });
     };
@@ -58,27 +60,64 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
         }
     };
 
+    const requestSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key) {
+            direction = sortConfig.direction === 'ascending' ? 'descending' : 'ascending';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedVentas = useMemo(() => {
+        let sortableItems = [...ventas];
+        if (sortConfig.key !== null) {
+            sortableItems.sort((a, b) => {
+                if (sortConfig.key === 'fechaDeVenta') {
+                    return new Date(b[sortConfig.key]) - new Date(a[sortConfig.key]);
+                }
+                if (sortConfig.key === 'producto') {
+                    return a.producto.nombre.localeCompare(b.producto.nombre);
+                }
+                if (a[sortConfig.key] < b[sortConfig.key]) {
+                    return -1;
+                }
+                if (a[sortConfig.key] > b[sortConfig.key]) {
+                    return 1;
+                }
+                return 0;
+            });
+        }
+        if (sortConfig.direction === 'ascending' && sortConfig.key !== 'fechaDeVenta') {
+            sortableItems.reverse();
+        }
+        return sortableItems;
+    }, [ventas, sortConfig]);
+
     if (!Array.isArray(ventas) || ventas.length === 0) {
         return <div>No hay ventas disponibles.</div>;
     }
 
     return (
         <div className="venta-list">
-            {/*<h2>Lista de Ventas</h2>*/}
             {successMessage && <div className="success-message">{successMessage}</div>}
             <table>
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Producto</th>
+                        <th onClick={() => requestSort('fechaDeVenta')}>
+                            Fecha {sortConfig.key === 'fechaDeVenta' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                        </th>
+                        <th onClick={() => requestSort('producto')}>
+                            Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                        </th>
                         <th>Cantidad</th>
                         <th>Precio</th>
                         <th>Tipo de Cambio</th>
+                        <th>Info Adicional</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {ventas.map((venta) => (
+                    {sortedVentas.map((venta) => (
                         <tr key={venta.id}>
                             {editingId === venta.id ? (
                                 <>
@@ -116,17 +155,25 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
                                         />
                                     </td>
                                     <td>
+                                        <textarea
+                                            name="infoAdicional"
+                                            value={editForm.infoAdicional}
+                                            onChange={handleChange}
+                                        />
+                                    </td>
+                                    <td>
                                         <button onClick={handleSubmit}>Guardar</button>
                                         <button onClick={() => setEditingId(null)}>Cancelar</button>
                                     </td>
                                 </>
                             ) : (
                                 <>
-                                    <td>{new Date(venta.fechaDeVenta).toLocaleDateString()}</td>
+                                    <td>{new Date(venta.fechaDeVenta+ 'T00:00:00').toLocaleDateString()}</td>
                                     <td>{venta.producto.nombre}</td>
                                     <td>{venta.cantidadVendida}</td>
                                     <td>{venta.precioDeVenta}</td>
                                     <td>{venta.tipoCambio}</td>
+                                    <td>{venta.infoAdicional}</td>
                                     <td>
                                         <button onClick={() => handleEdit(venta)}>Editar</button>
                                         <button onClick={() => handleDeleteClick(venta.id)}>Eliminar</button>

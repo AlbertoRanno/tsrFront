@@ -85,15 +85,20 @@ const VentasPage = () => {
     if (loading) return <div>Cargando ventas...</div>;
 
     return (
-        <div>
-            {/*<h1>Gestión de Ventas</h1>*/}
-            {error && <div className="error-message">{error}</div>}
-            <VentaForm onSubmit={handleCreateVenta} />
-            <VentaList
-                ventas={ventas}
-                onUpdate={handleUpdateVenta}
-                onDelete={handleDeleteVenta}
-            />
+        <div className="ventas-page">
+            <div className="ventas-container">
+                <div className="form-column">
+                    <VentaForm onSubmit={handleCreateVenta} />
+                </div>
+                <div className="list-column">
+                    {error && <div className="error-message">{error}</div>}
+                    <VentaList
+                        ventas={ventas}
+                        onUpdate={handleUpdateVenta}
+                        onDelete={handleDeleteVenta}
+                    />
+                </div>
+            </div>
         </div>
     );
 };
