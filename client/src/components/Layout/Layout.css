@@ -45,3 +45,18 @@ footer {
 .nav-logo:hover {
     color: #ea580c; 
 }
+
+.active-link {
+    color: #ea580c !important;
+}
+
+/* Asegúrate de que los enlaces normales tengan un color diferente */
+nav ul li a {
+    color: white; /* o el color que prefieras para los enlaces no activos */
+    text-decoration: none;
+}
+
+/* Estilo para el logo, para que no se vea afectado por el cambio de color */
+.nav-logo {
+    color: #ea580c !important;
+}
