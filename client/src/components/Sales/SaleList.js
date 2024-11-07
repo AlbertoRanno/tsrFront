@@ -68,30 +68,33 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
         setSortConfig({ key, direction });
     };
 
-    const sortedVentas = useMemo(() => {
-        let sortableItems = [...ventas];
-        if (sortConfig.key !== null) {
-            sortableItems.sort((a, b) => {
-                if (sortConfig.key === 'fechaDeVenta') {
-                    return new Date(b[sortConfig.key]) - new Date(a[sortConfig.key]);
-                }
-                if (sortConfig.key === 'producto') {
-                    return a.producto.nombre.localeCompare(b.producto.nombre);
-                }
-                if (a[sortConfig.key] < b[sortConfig.key]) {
-                    return -1;
-                }
-                if (a[sortConfig.key] > b[sortConfig.key]) {
-                    return 1;
-                }
-                return 0;
-            });
-        }
-        if (sortConfig.direction === 'ascending' && sortConfig.key !== 'fechaDeVenta') {
-            sortableItems.reverse();
-        }
-        return sortableItems;
-    }, [ventas, sortConfig]);
+// En el componente VentaList, actualiza la función de ordenamiento:
+
+const sortedVentas = useMemo(() => {
+    let sortableItems = [...ventas];
+    if (sortConfig.key !== null) {
+        sortableItems.sort((a, b) => {
+            if (sortConfig.key === 'fechaDeVenta') {
+                return sortConfig.direction === 'ascending' 
+                    ? new Date(a[sortConfig.key]) - new Date(b[sortConfig.key])
+                    : new Date(b[sortConfig.key]) - new Date(a[sortConfig.key]);
+            }
+            if (sortConfig.key === 'producto') {
+                return sortConfig.direction === 'ascending'
+                    ? a.producto.nombre.localeCompare(b.producto.nombre)
+                    : b.producto.nombre.localeCompare(a.producto.nombre);
+            }
+            if (a[sortConfig.key] < b[sortConfig.key]) {
+                return sortConfig.direction === 'ascending' ? -1 : 1;
+            }
+            if (a[sortConfig.key] > b[sortConfig.key]) {
+                return sortConfig.direction === 'ascending' ? 1 : -1;
+            }
+            return 0;
+        });
+    }
+    return sortableItems;
+}, [ventas, sortConfig]);
 
     if (!Array.isArray(ventas) || ventas.length === 0) {
         return <div>No hay ventas disponibles.</div>;
