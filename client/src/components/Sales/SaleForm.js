@@ -117,10 +117,10 @@ const Form = ({ onSubmit, initialData, formType }) => {
                 required
             />
             {exchangeRate && (
-                <p>Tipo de cambio actual (Blue): ${exchangeRate}</p>
+                <span>Actual: ${exchangeRate}</span>
             )}
             <a href="https://www.ambito.com/contenidos/dolar-mep-historico.html" target="_blank" rel="noopener noreferrer">
-                Ver historial del dólar MEP
+                Ver histórico
             </a>
             <textarea
                 name="infoAdicional"

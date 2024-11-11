@@ -1,8 +1,19 @@
-.compra-form input {
-    width: 15%;
-    margin-right: 10px;
+.form-column input {
+    width: 90%;
 }
-.compra-form select {
-    width: 20%;
-    margin-right: 10px;
+
+.form-column a,
+.form-column p {
+    width: 40%;
+}
+
+.form-column a {
+    margin-left: 10px;
+    color: #ea580c;
+    text-decoration: none;
+}
+
+.form-column textarea {
+    margin: 10px 0;
+    width: 95%;
 }

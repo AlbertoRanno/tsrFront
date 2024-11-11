@@ -1,6 +1,7 @@
 // src/components/Purchases/PurchaseList.js
 import React, { useState, useEffect, useMemo } from 'react';
 import ConfirmationModal from '../ConfirmationModal';
+import './PurchaseList.css';
 
 const CompraList = ({ compras, onUpdate, onDelete }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, id: null });

@@ -1,6 +1,7 @@
 // src/components/Sales/SaleList.js
 import React, { useState, useEffect, useMemo } from 'react';
 import ConfirmationModal from '../ConfirmationModal';
+import './SaleList.css';
 
 const VentaList = ({ ventas, onUpdate, onDelete }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, id: null });

@@ -51,10 +51,10 @@ footer {
     color: #ea580c !important;
 }
 
-/* Asegúrate de que los enlaces normales tengan un color diferente */
+/* enlaces normales con un color diferente */
 nav ul li a {
     color: white;
-    /* o el color que prefieras para los enlaces no activos */
+    /* o el color que prefiera para los enlaces no activos */
     text-decoration: none;
 }
 
@@ -100,9 +100,6 @@ nav ul li a {
     display: flex;
     flex-direction: column;
 }
-
-
-
 
 thead {
     position: sticky;
