@@ -1,9 +1,10 @@
-// src/components/Sales/SaleForm.js
+// src/components/Purchases/PurchaseForm.js y src/components/Sales/SaleForm.js
+
 import React, { useState, useEffect } from 'react';
 import { fetchProductos } from '../../api/api';
 import './SaleForm.css';
 
-const VentaForm = ({ onSubmit, initialData }) => {
+const Form = ({ onSubmit, initialData, formType }) => {
     const [formData, setFormData] = useState(initialData || {
         fechaDeVenta: '',
         cantidadVendida: '',
@@ -15,9 +16,11 @@ const VentaForm = ({ onSubmit, initialData }) => {
     const [productos, setProductos] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [exchangeRate, setExchangeRate] = useState(null);
 
     useEffect(() => {
         fetchProductosList();
+        fetchExchangeRate();
     }, []);
 
     useEffect(() => {
@@ -35,6 +38,16 @@ const VentaForm = ({ onSubmit, initialData }) => {
             setProductos(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Error al cargar los productos:', error);
+        }
+    };
+
+    const fetchExchangeRate = async () => {
+        try {
+            const response = await fetch('https://api.bluelytics.com.ar/v2/latest');
+            const data = await response.json();
+            setExchangeRate(data.blue.value_sell);
+        } catch (error) {
+            console.error('Error al obtener el tipo de cambio:', error);
         }
     };
 
@@ -60,36 +73,36 @@ const VentaForm = ({ onSubmit, initialData }) => {
                 infoAdicional: '',
                 producto: { id: '' }
             });
-            setSuccessMessage(initialData ? 'Venta actualizada exitosamente' : 'Venta creada exitosamente');
+            setSuccessMessage(initialData ? `${formType} actualizada exitosamente` : `${formType} creada exitosamente`);
         } catch (error) {
-            console.error('Error al enviar el formulario:', error);
+            console.error(`Error al enviar el formulario de ${formType}:`, error);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="venta-form">
+        <form onSubmit={handleSubmit} className={`${formType}-form`}>
             {successMessage && <div className="success-message">{successMessage}</div>}
             <input
                 type="date"
-                name="fechaDeVenta"
-                value={formData.fechaDeVenta}
+                name={`fechaDe${formType}`}
+                value={formData[`fechaDe${formType}`]}
                 onChange={handleChange}
                 required
             />
             <input
                 type="number"
-                name="cantidadVendida"
-                value={formData.cantidadVendida}
+                name={`cantidad${formType === 'Compra' ? 'Comprada' : 'Vendida'}`}
+                value={formData[`cantidad${formType === 'Compra' ? 'Comprada' : 'Vendida'}`]}
                 onChange={handleChange}
                 placeholder="Cantidad"
                 required
             />
             <input
                 type="number"
-                name="precioDeVenta"
-                value={formData.precioDeVenta}
+                name={`precioDe${formType}`}
+                value={formData[`precioDe${formType}`]}
                 onChange={handleChange}
                 placeholder="Precio Unitario"
                 required
@@ -103,6 +116,12 @@ const VentaForm = ({ onSubmit, initialData }) => {
                 step="0.01"
                 required
             />
+            {exchangeRate && (
+                <p>Tipo de cambio actual (Blue): ${exchangeRate}</p>
+            )}
+            <a href="https://www.ambito.com/contenidos/dolar-mep-historico.html" target="_blank" rel="noopener noreferrer">
+                Ver historial del dólar MEP
+            </a>
             <textarea
                 name="infoAdicional"
                 value={formData.infoAdicional}
@@ -129,4 +148,4 @@ const VentaForm = ({ onSubmit, initialData }) => {
     );
 };
 
-export default VentaForm;
+export default Form;

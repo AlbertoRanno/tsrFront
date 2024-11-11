@@ -1,4 +1,3 @@
-// src/pages/ProductsPage.js
 import React, { useState, useEffect } from 'react';
 import { fetchProductos, createProducto, updateProducto, deleteProducto } from '../api/api';
 import ProductForm from '../components/Products/ProductForm';
@@ -27,7 +26,6 @@ const ProductsPage = () => {
 
     const handleCreateProduct = async (productData) => {
         try {
-            // Verificar si ya existe un producto con el mismo nombre
             const existingProduct = products.find(p => p.nombre.toLowerCase() === productData.nombre.toLowerCase());
             if (existingProduct) {
                 setError('Ya existe un producto con este nombre. Por favor, elija un nombre diferente.');
@@ -50,7 +48,6 @@ const ProductsPage = () => {
 
     const handleUpdateProduct = async (id, productData) => {
         try {
-            // Verificar si ya existe otro producto con el mismo nombre (excluyendo el producto actual)
             const existingProduct = products.find(p => p.id !== id && p.nombre.toLowerCase() === productData.nombre.toLowerCase());
             if (existingProduct) {
                 setError('Ya existe otro producto con este nombre. Por favor, elija un nombre diferente.');
@@ -58,11 +55,11 @@ const ProductsPage = () => {
             }
             const result = await updateProducto(id, productData);
             if (result === "Producto modificado") {
-                setProducts(prevProducts => prevProducts.map(product => 
+                setProducts(prevProducts => prevProducts.map(product =>
                     product.id === id ? { ...product, ...productData } : product
                 ));
             } else if (typeof result === 'object' && result.id) {
-                setProducts(prevProducts => prevProducts.map(product => 
+                setProducts(prevProducts => prevProducts.map(product =>
                     product.id === id ? result : product
                 ));
             } else {
@@ -97,15 +94,20 @@ const ProductsPage = () => {
     if (loading) return <div>Cargando productos...</div>;
 
     return (
-        <div>
-            {/*<h1>Gestión de Productos</h1>*/}
-            {error && <div className="error-message">{error}</div>}
-            <ProductForm onSubmit={handleCreateProduct} />
-            <ProductList
-                products={products}
-                onUpdate={handleUpdateProduct}
-                onDelete={handleDeleteProduct}
-            />
+        <div className="page-container">
+            <div className="content-container">
+                <div className="form-column">
+                    <ProductForm onSubmit={handleCreateProduct} />
+                </div>
+                <div className="list-column">
+                    {error && <div className="error-message">{error}</div>}
+                    <ProductList
+                        products={products}
+                        onUpdate={handleUpdateProduct}
+                        onDelete={handleDeleteProduct}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

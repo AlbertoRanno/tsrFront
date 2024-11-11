@@ -8,6 +8,7 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
     const [editForm, setEditForm] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'fechaDeCompra', direction: 'descending' });
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         if (successMessage) {
@@ -67,9 +68,12 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
         setSortConfig({ key, direction });
     };
 
-    const sortedCompras = useMemo(() => {
-        let sortableItems = [...compras];
-        const compareFunction = (a, b) => {
+    const sortedAndFilteredCompras = useMemo(() => {
+        let filteredItems = compras.filter(compra =>
+            compra.producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+        return filteredItems.sort((a, b) => {
             if (sortConfig.key === 'fechaDeCompra') {
                 const dateA = new Date(a.fechaDeCompra);
                 const dateB = new Date(b.fechaDeCompra);
@@ -86,10 +90,8 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                 return sortConfig.direction === 'ascending' ? 1 : -1;
             }
             return 0;
-        };
-
-        return sortableItems.sort(compareFunction);
-    }, [compras, sortConfig]);
+        });
+    }, [compras, sortConfig, searchTerm]);
 
     if (!Array.isArray(compras) || compras.length === 0) {
         return <div>No hay compras disponibles.</div>;
@@ -106,6 +108,12 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                         </th>
                         <th onClick={() => requestSort('producto')}>
                             Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                            <input
+                                type="text"
+                                placeholder="Buscar producto..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </th>
                         <th>Cantidad</th>
                         <th>Precio</th>
@@ -114,7 +122,7 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedCompras.map((compra) => (
+                    {sortedAndFilteredCompras.map((compra) => (
                         <tr key={compra.id}>
                             {editingId === compra.id ? (
                                 <>
@@ -171,16 +179,16 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                             )}
                         </tr>
                     ))}
-                </tbody>
-            </table>
-            <ConfirmationModal
-                isOpen={deleteConfirmation.isOpen}
-                onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
-                onConfirm={handleDeleteConfirm}
-                message="¿Está seguro de que desea eliminar esta compra?"
-            />
-        </div>
-    );
-};
-
-export default CompraList;
+                    </tbody>
+                </table>
+                <ConfirmationModal
+                    isOpen={deleteConfirmation.isOpen}
+                    onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
+                    onConfirm={handleDeleteConfirm}
+                    message="¿Está seguro de que desea eliminar esta compra?"
+                />
+            </div>
+        );
+    };
+    
+    export default CompraList;

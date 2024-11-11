@@ -8,6 +8,7 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
     const [editForm, setEditForm] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'fechaDeVenta', direction: 'descending' });
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         if (successMessage) {
@@ -68,12 +69,12 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
         setSortConfig({ key, direction });
     };
 
-// En el componente VentaList, actualiza la función de ordenamiento:
+    const sortedAndFilteredVentas = useMemo(() => {
+        let filteredItems = ventas.filter(venta =>
+            venta.producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
-const sortedVentas = useMemo(() => {
-    let sortableItems = [...ventas];
-    if (sortConfig.key !== null) {
-        sortableItems.sort((a, b) => {
+        return filteredItems.sort((a, b) => {
             if (sortConfig.key === 'fechaDeVenta') {
                 return sortConfig.direction === 'ascending' 
                     ? new Date(a[sortConfig.key]) - new Date(b[sortConfig.key])
@@ -92,9 +93,7 @@ const sortedVentas = useMemo(() => {
             }
             return 0;
         });
-    }
-    return sortableItems;
-}, [ventas, sortConfig]);
+    }, [ventas, sortConfig, searchTerm]);
 
     if (!Array.isArray(ventas) || ventas.length === 0) {
         return <div>No hay ventas disponibles.</div>;
@@ -111,6 +110,12 @@ const sortedVentas = useMemo(() => {
                         </th>
                         <th onClick={() => requestSort('producto')}>
                             Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                            <input
+                                type="text"
+                                placeholder="Buscar producto..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </th>
                         <th>Cantidad</th>
                         <th>Precio</th>
@@ -120,7 +125,7 @@ const sortedVentas = useMemo(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedVentas.map((venta) => (
+                    {sortedAndFilteredVentas.map((venta) => (
                         <tr key={venta.id}>
                             {editingId === venta.id ? (
                                 <>
@@ -185,16 +190,16 @@ const sortedVentas = useMemo(() => {
                             )}
                         </tr>
                     ))}
-                </tbody>
-            </table>
-            <ConfirmationModal
-                isOpen={deleteConfirmation.isOpen}
-                onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
-                onConfirm={handleDeleteConfirm}
-                message="¿Está seguro de que desea eliminar esta venta?"
-            />
-        </div>
-    );
-};
-
-export default VentaList;
+                    </tbody>
+                </table>
+                <ConfirmationModal
+                    isOpen={deleteConfirmation.isOpen}
+                    onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
+                    onConfirm={handleDeleteConfirm}
+                    message="¿Está seguro de que desea eliminar esta venta?"
+                />
+            </div>
+        );
+    };
+    
+    export default VentaList;

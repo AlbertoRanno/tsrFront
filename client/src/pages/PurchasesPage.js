@@ -82,18 +82,26 @@ const ComprasPage = () => {
         }
     };
 
-    if (loading) return <div>Cargando compras...</div>;
 
     return (
-        <div>
-            {/*<h1>Gestión de Compras</h1>*/}
-            {error && <div className="error-message">{error}</div>}
-            <CompraForm onSubmit={handleCreateCompra} />
-            <CompraList
-                compras={compras}
-                onUpdate={handleUpdateCompra}
-                onDelete={handleDeleteCompra}
-            />
+        <div className="page-container">
+            <div className="content-container">
+                <div className="form-column">
+                    <CompraForm onSubmit={handleCreateCompra} />
+                </div>
+                <div className="list-column">
+                    {error && <div className="error-message">{error}</div>}
+                    {loading ? (
+                        <div>Cargando compras...</div>
+                    ) : (
+                        <CompraList
+                            compras={compras}
+                            onUpdate={handleUpdateCompra}
+                            onDelete={handleDeleteCompra}
+                        />
+                    )}
+                </div>
+            </div>
         </div>
     );
 };

@@ -82,21 +82,23 @@ const VentasPage = () => {
         }
     };
 
-    if (loading) return <div>Cargando ventas...</div>;
-
     return (
-        <div className="ventas-page">
-            <div className="ventas-container">
+        <div className="page-container">
+            <div className="content-container">
                 <div className="form-column">
                     <VentaForm onSubmit={handleCreateVenta} />
                 </div>
                 <div className="list-column">
                     {error && <div className="error-message">{error}</div>}
-                    <VentaList
-                        ventas={ventas}
-                        onUpdate={handleUpdateVenta}
-                        onDelete={handleDeleteVenta}
-                    />
+                    {loading ? (
+                        <div>Cargando ventas...</div>
+                    ) : (
+                        <VentaList
+                            ventas={ventas}
+                            onUpdate={handleUpdateVenta}
+                            onDelete={handleDeleteVenta}
+                        />
+                    )}
                 </div>
             </div>
         </div>

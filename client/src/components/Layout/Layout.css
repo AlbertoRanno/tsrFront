@@ -24,7 +24,7 @@ nav ul li a {
 
 main {
     flex-grow: 1;
-    padding: 2rem;
+    padding: 1rem;
     background-color: #f0f0f0;
 }
 
@@ -42,8 +42,9 @@ footer {
     color: #f97316;
     transition: color 0.2s;
 }
+
 .nav-logo:hover {
-    color: #ea580c; 
+    color: #ea580c;
 }
 
 .active-link {
@@ -52,11 +53,60 @@ footer {
 
 /* Asegúrate de que los enlaces normales tengan un color diferente */
 nav ul li a {
-    color: white; /* o el color que prefieras para los enlaces no activos */
+    color: white;
+    /* o el color que prefieras para los enlaces no activos */
     text-decoration: none;
 }
 
 /* Estilo para el logo, para que no se vea afectado por el cambio de color */
 .nav-logo {
     color: #ea580c !important;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.content-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.form-column {
+    width: 200px;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.list-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.list-header {
+    background-color: #f0f0f0;
+    padding-top: 10px;
+    font-weight: bold;
+}
+
+.list-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
 }

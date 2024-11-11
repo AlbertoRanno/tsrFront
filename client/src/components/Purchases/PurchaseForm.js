@@ -1,22 +1,26 @@
-// src/components/Purchases/PurchaseForm.js
+// src/components/Purchases/PurchaseForm.js y src/components/Sales/SaleForm.js
+
 import React, { useState, useEffect } from 'react';
 import { fetchProductos } from '../../api/api';
 import './PurchaseForm.css';
 
-const CompraForm = ({ onSubmit, initialData }) => {
+const Form = ({ onSubmit, initialData, formType }) => {
     const [formData, setFormData] = useState(initialData || {
         fechaDeCompra: '',
         cantidadComprada: '',
         precioDeCompra: '',
         tipoCambio: '',
+        infoAdicional: '',
         producto: { id: '' }
     });
     const [productos, setProductos] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [exchangeRate, setExchangeRate] = useState(null);
 
     useEffect(() => {
         fetchProductosList();
+        fetchExchangeRate();
     }, []);
 
     useEffect(() => {
@@ -34,6 +38,16 @@ const CompraForm = ({ onSubmit, initialData }) => {
             setProductos(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Error al cargar los productos:', error);
+        }
+    };
+
+    const fetchExchangeRate = async () => {
+        try {
+            const response = await fetch('https://api.bluelytics.com.ar/v2/latest');
+            const data = await response.json();
+            setExchangeRate(data.blue.value_sell);
+        } catch (error) {
+            console.error('Error al obtener el tipo de cambio:', error);
         }
     };
 
@@ -56,38 +70,39 @@ const CompraForm = ({ onSubmit, initialData }) => {
                 cantidadComprada: '',
                 precioDeCompra: '',
                 tipoCambio: '',
+                infoAdicional: '',
                 producto: { id: '' }
             });
-            setSuccessMessage(initialData ? 'Compra actualizada exitosamente' : 'Compra creada exitosamente');
+            setSuccessMessage(initialData ? `${formType} actualizada exitosamente` : `${formType} creada exitosamente`);
         } catch (error) {
-            console.error('Error al enviar el formulario:', error);
+            console.error(`Error al enviar el formulario de ${formType}:`, error);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="compra-form">
+        <form onSubmit={handleSubmit} className={`${formType}-form`}>
             {successMessage && <div className="success-message">{successMessage}</div>}
             <input
                 type="date"
-                name="fechaDeCompra"
-                value={formData.fechaDeCompra}
+                name={`fechaDe${formType}`}
+                value={formData[`fechaDe${formType}`]}
                 onChange={handleChange}
                 required
             />
             <input
                 type="number"
-                name="cantidadComprada"
-                value={formData.cantidadComprada}
+                name={`cantidad${formType === 'Compra' ? 'Comprada' : 'Vendida'}`}
+                value={formData[`cantidad${formType === 'Compra' ? 'Comprada' : 'Vendida'}`]}
                 onChange={handleChange}
                 placeholder="Cantidad"
                 required
             />
             <input
                 type="number"
-                name="precioDeCompra"
-                value={formData.precioDeCompra}
+                name={`precioDe${formType}`}
+                value={formData[`precioDe${formType}`]}
                 onChange={handleChange}
                 placeholder="Precio Unitario"
                 required
@@ -100,6 +115,18 @@ const CompraForm = ({ onSubmit, initialData }) => {
                 placeholder="Tipo de cambio"
                 step="0.01"
                 required
+            />
+            {exchangeRate && (
+                <p>Tipo de cambio actual (Blue): ${exchangeRate}</p>
+            )}
+            <a href="https://www.ambito.com/contenidos/dolar-mep-historico.html" target="_blank" rel="noopener noreferrer">
+                Ver historial del dólar MEP
+            </a>
+            <textarea
+                name="infoAdicional"
+                value={formData.infoAdicional}
+                onChange={handleChange}
+                placeholder="Información adicional (opcional)"
             />
             <select
                 name="productoId"
@@ -121,4 +148,4 @@ const CompraForm = ({ onSubmit, initialData }) => {
     );
 };
 
-export default CompraForm;
+export default Form;
