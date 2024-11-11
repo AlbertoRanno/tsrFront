@@ -1,7 +1,7 @@
 // src/pages/ComprasPage.js
 import React, { useState, useEffect } from 'react';
 import { fetchCompras, createCompra, updateCompra, deleteCompra } from '../api/api';
-import CompraForm from '../components/Purchases/PurchaseForm';
+import PurchaseForm from '../components/Purchases/PurchaseForm';
 import CompraList from '../components/Purchases/PurchaseList';
 
 const ComprasPage = () => {
@@ -82,12 +82,11 @@ const ComprasPage = () => {
         }
     };
 
-
     return (
         <div className="page-container">
             <div className="content-container">
                 <div className="form-column">
-                    <CompraForm onSubmit={handleCreateCompra} />
+                    <PurchaseForm onSubmit={handleCreateCompra} />
                 </div>
                 <div className="list-column">
                     {error && <div className="error-message">{error}</div>}

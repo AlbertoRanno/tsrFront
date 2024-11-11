@@ -1,4 +1,3 @@
-// src/components/Sales/SaleList.js
 import React, { useState, useEffect, useMemo } from 'react';
 import ConfirmationModal from '../ConfirmationModal';
 import './SaleList.css';
@@ -77,14 +76,13 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
 
         return filteredItems.sort((a, b) => {
             if (sortConfig.key === 'fechaDeVenta') {
-                return sortConfig.direction === 'ascending' 
-                    ? new Date(a[sortConfig.key]) - new Date(b[sortConfig.key])
-                    : new Date(b[sortConfig.key]) - new Date(a[sortConfig.key]);
+                const dateA = new Date(a.fechaDeVenta);
+                const dateB = new Date(b.fechaDeVenta);
+                return sortConfig.direction === 'ascending' ? dateA - dateB : dateB - dateA;
             }
             if (sortConfig.key === 'producto') {
-                return sortConfig.direction === 'ascending'
-                    ? a.producto.nombre.localeCompare(b.producto.nombre)
-                    : b.producto.nombre.localeCompare(a.producto.nombre);
+                const compareResult = a.producto.nombre.localeCompare(b.producto.nombre);
+                return sortConfig.direction === 'ascending' ? compareResult : -compareResult;
             }
             if (a[sortConfig.key] < b[sortConfig.key]) {
                 return sortConfig.direction === 'ascending' ? -1 : 1;
@@ -107,7 +105,8 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
                 <thead>
                     <tr>
                         <th onClick={() => requestSort('fechaDeVenta')}>
-                            Fecha {sortConfig.key === 'fechaDeVenta' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                            Fecha {sortConfig.key === 'fechaDeVenta' && 
+                            (sortConfig.direction === 'ascending' ? '▲' : '▼')}
                         </th>
                         <th onClick={() => requestSort('producto')}>
                             Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
@@ -177,7 +176,7 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
                                 </>
                             ) : (
                                 <>
-                                    <td>{new Date(venta.fechaDeVenta+ 'T00:00:00').toLocaleDateString()}</td>
+                                    <td>{new Date(venta.fechaDeVenta + 'T00:00:00').toLocaleDateString()}</td>
                                     <td>{venta.producto.nombre}</td>
                                     <td>{venta.cantidadVendida}</td>
                                     <td>{venta.precioDeVenta}</td>
@@ -191,16 +190,16 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
                             )}
                         </tr>
                     ))}
-                    </tbody>
-                </table>
-                <ConfirmationModal
-                    isOpen={deleteConfirmation.isOpen}
-                    onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
-                    onConfirm={handleDeleteConfirm}
-                    message="¿Está seguro de que desea eliminar esta venta?"
-                />
-            </div>
-        );
-    };
-    
-    export default VentaList;
+                </tbody>
+            </table>
+            <ConfirmationModal
+                isOpen={deleteConfirmation.isOpen}
+                onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
+                onConfirm={handleDeleteConfirm}
+                message="¿Está seguro de que desea eliminar esta venta?"
+            />
+        </div>
+    );
+};
+
+export default VentaList;

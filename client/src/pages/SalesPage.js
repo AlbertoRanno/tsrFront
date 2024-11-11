@@ -1,7 +1,6 @@
-// src/pages/VentasPage.js
 import React, { useState, useEffect } from 'react';
 import { fetchVentas, createVenta, updateVenta, deleteVenta } from '../api/api';
-import VentaForm from '../components/Sales/SaleForm';
+import SaleForm from '../components/Sales/SaleForm';
 import VentaList from '../components/Sales/SaleList';
 
 const VentasPage = () => {
@@ -36,11 +35,10 @@ const VentasPage = () => {
             } else {
                 await fetchVentasList();
             }
-            return true;
+            return { success: true };
         } catch (err) {
             console.error('Error al crear la venta:', err);
-            setError('Error al crear la venta. Por favor, intente de nuevo.');
-            return false;
+            return { success: false, error: err.message || 'Error al crear la venta. Por favor, intente de nuevo.' };
         }
     };
 
@@ -58,11 +56,10 @@ const VentasPage = () => {
             } else {
                 await fetchVentasList();
             }
-            return true;
+            return { success: true };
         } catch (err) {
             console.error('Error al actualizar la venta:', err);
-            setError('Error al actualizar la venta. Por favor, intente de nuevo.');
-            return false;
+            return { success: false, error: err.message || 'Error al actualizar la venta. Por favor, intente de nuevo.' };
         }
     };
 
@@ -74,11 +71,10 @@ const VentasPage = () => {
             } else {
                 await fetchVentasList();
             }
-            return true;
+            return { success: true };
         } catch (err) {
             console.error('Error al eliminar la venta:', err);
-            setError('Error al eliminar la venta. Por favor, intente de nuevo.');
-            return false;
+            return { success: false, error: err.message || 'Error al eliminar la venta. Por favor, intente de nuevo.' };
         }
     };
 
@@ -86,7 +82,7 @@ const VentasPage = () => {
         <div className="page-container">
             <div className="content-container">
                 <div className="form-column">
-                    <VentaForm onSubmit={handleCreateVenta} />
+                    <SaleForm onSubmit={handleCreateVenta} />
                 </div>
                 <div className="list-column">
                     {error && <div className="error-message">{error}</div>}

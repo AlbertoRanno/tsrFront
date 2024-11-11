@@ -180,16 +180,16 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
                             )}
                         </tr>
                     ))}
-                    </tbody>
-                </table>
-                <ConfirmationModal
-                    isOpen={deleteConfirmation.isOpen}
-                    onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
-                    onConfirm={handleDeleteConfirm}
-                    message="¿Está seguro de que desea eliminar esta compra?"
-                />
-            </div>
-        );
-    };
-    
-    export default CompraList;
+                </tbody>
+            </table>
+            <ConfirmationModal
+                isOpen={deleteConfirmation.isOpen}
+                onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}
+                onConfirm={handleDeleteConfirm}
+                message="¿Está seguro de que desea eliminar esta compra?"
+            />
+        </div>
+    );
+};
+
+export default CompraList;

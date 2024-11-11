@@ -75,16 +75,26 @@ export const deleteCompra = (id) => fetch(`${API_BASE_URL}/tsr/compra/${id}`, { 
 export const fetchVentas = () => fetch(`${API_BASE_URL}/tsr/venta`).then(handleResponse);
 export const fetchVentasPorPeriodo = (fechaInicio, fechaFin) =>
     fetch(`${API_BASE_URL}/tsr/venta/periodo/${fechaInicio}/${fechaFin}`).then(handleResponse);
-export const createVenta = (venta) => fetch(`${API_BASE_URL}/tsr/venta`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(venta)
-}).then(handleResponse);
-export const updateVenta = (id, venta) => fetch(`${API_BASE_URL}/tsr/venta/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(venta)
-}).then(handleResponse);
+export const createVenta = async (venta) => {
+    console.log("Enviando venta al servidor:", venta);
+    const response = await fetch(`${API_BASE_URL}/tsr/venta`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(venta),
+    });
+    return handleResponse(response);
+};
+
+export const updateVenta = async (id, venta) => {
+    console.log("Enviando venta actualizada al servidor:", venta);
+    const response = await fetch(`${API_BASE_URL}/tsr/venta/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(venta),
+    });
+    return handleResponse(response);
+};
+
 export const deleteVenta = (id) => fetch(`${API_BASE_URL}/tsr/venta/${id}`, { method: 'DELETE' }).then(handleResponse);
 
 // Funciones para Reportes

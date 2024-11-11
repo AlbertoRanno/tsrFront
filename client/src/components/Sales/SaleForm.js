@@ -1,10 +1,9 @@
-// src/components/Purchases/PurchaseForm.js y src/components/Sales/SaleForm.js
-
+// src/components/Sales/SaleForm.js
 import React, { useState, useEffect } from 'react';
 import { fetchProductos } from '../../api/api';
 import './SaleForm.css';
 
-const Form = ({ onSubmit, initialData, formType }) => {
+const SaleForm = ({ onSubmit, initialData }) => {
     const [formData, setFormData] = useState(initialData || {
         fechaDeVenta: '',
         cantidadVendida: '',
@@ -73,36 +72,36 @@ const Form = ({ onSubmit, initialData, formType }) => {
                 infoAdicional: '',
                 producto: { id: '' }
             });
-            setSuccessMessage(initialData ? `${formType} actualizada exitosamente` : `${formType} creada exitosamente`);
+            setSuccessMessage('Venta creada exitosamente');
         } catch (error) {
-            console.error(`Error al enviar el formulario de ${formType}:`, error);
+            console.error('Error al enviar el formulario de venta:', error);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className={`${formType}-form`}>
+        <form onSubmit={handleSubmit} className="sale-form">
             {successMessage && <div className="success-message">{successMessage}</div>}
             <input
                 type="date"
-                name={`fechaDe${formType}`}
-                value={formData[`fechaDe${formType}`]}
+                name="fechaDeVenta"
+                value={formData.fechaDeVenta}
                 onChange={handleChange}
                 required
             />
             <input
                 type="number"
-                name={`cantidad${formType === 'Compra' ? 'Comprada' : 'Vendida'}`}
-                value={formData[`cantidad${formType === 'Compra' ? 'Comprada' : 'Vendida'}`]}
+                name="cantidadVendida"
+                value={formData.cantidadVendida}
                 onChange={handleChange}
                 placeholder="Cantidad"
                 required
             />
             <input
                 type="number"
-                name={`precioDe${formType}`}
-                value={formData[`precioDe${formType}`]}
+                name="precioDeVenta"
+                value={formData.precioDeVenta}
                 onChange={handleChange}
                 placeholder="Precio Unitario"
                 required
@@ -142,10 +141,10 @@ const Form = ({ onSubmit, initialData, formType }) => {
                 ))}
             </select>
             <button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Cargando...' : (initialData ? 'Actualizar' : 'Crear')}
+                {isSubmitting ? 'Cargando...' : 'Crear Venta'}
             </button>
         </form>
     );
 };
 
-export default Form;
+export default SaleForm;
