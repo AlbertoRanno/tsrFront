@@ -3,7 +3,8 @@
     margin-left: 10px;
 }
 
-#root > div > main > div > div > div.list-column > div > table > thead > tr > th:nth-child(2) > input[type=text] {
-    width: 60%;
-    margin-left: 10px;
+.compra-list {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }

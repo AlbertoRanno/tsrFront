@@ -101,97 +101,100 @@ const VentaList = ({ ventas, onUpdate, onDelete }) => {
     return (
         <div className="venta-list">
             {successMessage && <div className="success-message">{successMessage}</div>}
-            <table>
-                <thead>
-                    <tr>
-                        <th onClick={() => requestSort('fechaDeVenta')}>
-                            Fecha {sortConfig.key === 'fechaDeVenta' && 
-                            (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                        </th>
-                        <th onClick={() => requestSort('producto')}>
-                            Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                            <input
-                                type="text"
-                                placeholder="Buscar producto..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Tipo de Cambio</th>
-                        <th>Info Adicional</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sortedAndFilteredVentas.map((venta) => (
-                        <tr key={venta.id}>
-                            {editingId === venta.id ? (
-                                <>
-                                    <td>
-                                        <input
-                                            type="date"
-                                            name="fechaDeVenta"
-                                            value={editForm.fechaDeVenta}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>{venta.producto.nombre}</td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="cantidadVendida"
-                                            value={editForm.cantidadVendida}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="precioDeVenta"
-                                            value={editForm.precioDeVenta}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="tipoCambio"
-                                            value={editForm.tipoCambio}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <textarea
-                                            name="infoAdicional"
-                                            value={editForm.infoAdicional}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <button onClick={handleSubmit}>Guardar</button>
-                                        <button onClick={() => setEditingId(null)}>Cancelar</button>
-                                    </td>
-                                </>
-                            ) : (
-                                <>
-                                    <td>{new Date(venta.fechaDeVenta + 'T00:00:00').toLocaleDateString()}</td>
-                                    <td>{venta.producto.nombre}</td>
-                                    <td>{venta.cantidadVendida}</td>
-                                    <td>{venta.precioDeVenta}</td>
-                                    <td>{venta.tipoCambio}</td>
-                                    <td>{venta.infoAdicional}</td>
-                                    <td>
-                                        <button onClick={() => handleEdit(venta)}>Editar</button>
-                                        <button onClick={() => handleDeleteClick(venta.id)}>Eliminar</button>
-                                    </td>
-                                </>
-                            )}
+
+            <div className="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th onClick={() => requestSort('fechaDeVenta')}>
+                                Fecha {sortConfig.key === 'fechaDeVenta' &&
+                                    (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                            </th>
+                            <th onClick={() => requestSort('producto')}>
+                                Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                                <input
+                                    type="text"
+                                    placeholder="Buscar producto..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Tipo de Cambio</th>
+                            <th>Info Adicional</th>
+                            <th>Acciones</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {sortedAndFilteredVentas.map((venta) => (
+                            <tr key={venta.id}>
+                                {editingId === venta.id ? (
+                                    <>
+                                        <td>
+                                            <input
+                                                type="date"
+                                                name="fechaDeVenta"
+                                                value={editForm.fechaDeVenta}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>{venta.producto.nombre}</td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="cantidadVendida"
+                                                value={editForm.cantidadVendida}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="precioDeVenta"
+                                                value={editForm.precioDeVenta}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="tipoCambio"
+                                                value={editForm.tipoCambio}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <textarea
+                                                name="infoAdicional"
+                                                value={editForm.infoAdicional}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <button onClick={handleSubmit}>Guardar</button>
+                                            <button onClick={() => setEditingId(null)}>Cancelar</button>
+                                        </td>
+                                    </>
+                                ) : (
+                                    <>
+                                        <td>{new Date(venta.fechaDeVenta + 'T00:00:00').toLocaleDateString()}</td>
+                                        <td>{venta.producto.nombre}</td>
+                                        <td>{venta.cantidadVendida}</td>
+                                        <td>{venta.precioDeVenta}</td>
+                                        <td>{venta.tipoCambio}</td>
+                                        <td>{venta.infoAdicional}</td>
+                                        <td>
+                                            <button onClick={() => handleEdit(venta)}>Editar</button>
+                                            <button onClick={() => handleDeleteClick(venta.id)}>Eliminar</button>
+                                        </td>
+                                    </>
+                                )}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             <ConfirmationModal
                 isOpen={deleteConfirmation.isOpen}
                 onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}

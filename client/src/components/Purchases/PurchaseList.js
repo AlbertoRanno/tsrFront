@@ -101,87 +101,90 @@ const CompraList = ({ compras, onUpdate, onDelete }) => {
     return (
         <div className="compra-list">
             {successMessage && <div className="success-message">{successMessage}</div>}
-            <table>
-                <thead>
-                    <tr>
-                        <th onClick={() => requestSort('fechaDeCompra')}>
-                            Fecha {sortConfig.key === 'fechaDeCompra' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                        </th>
-                        <th onClick={() => requestSort('producto')}>
-                            Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
-                            <input
-                                type="text"
-                                placeholder="Buscar producto..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Tipo de Cambio</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sortedAndFilteredCompras.map((compra) => (
-                        <tr key={compra.id}>
-                            {editingId === compra.id ? (
-                                <>
-                                    <td>
-                                        <input
-                                            type="date"
-                                            name="fechaDeCompra"
-                                            value={editForm.fechaDeCompra}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>{compra.producto.nombre}</td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="cantidadComprada"
-                                            value={editForm.cantidadComprada}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="precioDeCompra"
-                                            value={editForm.precioDeCompra}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="tipoCambio"
-                                            value={editForm.tipoCambio}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <button onClick={handleSubmit}>Guardar</button>
-                                        <button onClick={() => setEditingId(null)}>Cancelar</button>
-                                    </td>
-                                </>
-                            ) : (
-                                <>
-                                    <td>{new Date(compra.fechaDeCompra + 'T00:00:00').toLocaleDateString()}</td>
-                                    <td>{compra.producto.nombre}</td>
-                                    <td>{compra.cantidadComprada}</td>
-                                    <td>{compra.precioDeCompra}</td>
-                                    <td>{compra.tipoCambio}</td>
-                                    <td>
-                                        <button onClick={() => handleEdit(compra)}>Editar</button>
-                                        <button onClick={() => handleDeleteClick(compra.id)}>Eliminar</button>
-                                    </td>
-                                </>
-                            )}
+
+            <div className="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th onClick={() => requestSort('fechaDeCompra')}>
+                                Fecha {sortConfig.key === 'fechaDeCompra' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                            </th>
+                            <th onClick={() => requestSort('producto')}>
+                                Producto {sortConfig.key === 'producto' && (sortConfig.direction === 'ascending' ? '▲' : '▼')}
+                                <input
+                                    type="text"
+                                    placeholder="Buscar producto..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Tipo de Cambio</th>
+                            <th>Acciones</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {sortedAndFilteredCompras.map((compra) => (
+                            <tr key={compra.id}>
+                                {editingId === compra.id ? (
+                                    <>
+                                        <td>
+                                            <input
+                                                type="date"
+                                                name="fechaDeCompra"
+                                                value={editForm.fechaDeCompra}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>{compra.producto.nombre}</td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="cantidadComprada"
+                                                value={editForm.cantidadComprada}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="precioDeCompra"
+                                                value={editForm.precioDeCompra}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                name="tipoCambio"
+                                                value={editForm.tipoCambio}
+                                                onChange={handleChange}
+                                            />
+                                        </td>
+                                        <td>
+                                            <button onClick={handleSubmit}>Guardar</button>
+                                            <button onClick={() => setEditingId(null)}>Cancelar</button>
+                                        </td>
+                                    </>
+                                ) : (
+                                    <>
+                                        <td>{new Date(compra.fechaDeCompra + 'T00:00:00').toLocaleDateString()}</td>
+                                        <td>{compra.producto.nombre}</td>
+                                        <td>{compra.cantidadComprada}</td>
+                                        <td>{compra.precioDeCompra}</td>
+                                        <td>{compra.tipoCambio}</td>
+                                        <td>
+                                            <button onClick={() => handleEdit(compra)}>Editar</button>
+                                            <button onClick={() => handleDeleteClick(compra.id)}>Eliminar</button>
+                                        </td>
+                                    </>
+                                )}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             <ConfirmationModal
                 isOpen={deleteConfirmation.isOpen}
                 onClose={() => setDeleteConfirmation({ isOpen: false, id: null })}

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Layout.css';
+import LogoTSR from './LogoTSR.png';
 
 const Layout = ({ children }) => {
     const location = useLocation();
@@ -15,9 +16,9 @@ const Layout = ({ children }) => {
             <header>
                 <nav>
                     <ul>
-                        <li>
+                    <li className="logo-container">
                             <Link to="/user-preferences" className="nav-logo">
-                                TSR
+                                <img src={LogoTSR} alt="Logo TSR" className="logo-image" />
                             </Link>
                         </li>
                         <li>
